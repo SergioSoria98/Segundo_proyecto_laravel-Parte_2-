@@ -1,0 +1,9 @@
+@import 'bootstrap/scss/bootstrap';
+
+@import "components/navbar";
+
+.form-inline .form-control {
+    display: inline-block;
+    width: auto;
+    vertical-align: middle;
+  }

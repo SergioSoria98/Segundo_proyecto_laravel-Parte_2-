@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PagesController;
 use App\Http\Controllers\LoginController;
 use App\Models\User;
+use App\Http\Controllers\UsersController;
+use App\Models\Role;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,7 +20,18 @@ use App\Models\User;
 */
 
 
+/*
+App\Models\User::create([
+    'name' => 'Moderador',
+    'email' => 'moderador@gmail.com',
+    'password' => bcrypt('Sergio123'),
+    'role' => 'moderador',
+]);
+*/
 
+Route::get('roles', function(){
+    return Role::with('user')->get();
+});
 
 Route::get('/', [PagesController::class, 'home'])->name('home');
 
@@ -26,6 +39,7 @@ Route::get('saludos/{nombre?}', [PagesController::class, 'saludo'])->name('salud
 
 
 Route::resource('mensajes', MessagesController::class);
+Route::resource('usuarios', UsersController::class);
 
 
 

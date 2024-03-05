@@ -36,6 +36,11 @@
                 <li class="{{ activeMenu('mensajes*') }}">
                     <a class="nav-link" href="{{ route('mensajes.index') }}">Mensajes</a>
                 </li>
+                @if (auth()->user()->hasRoles(['admin']))
+                    <li class="{{ activeMenu('mensajes*') }}">
+                        <a class="nav-link" href="{{ route('usuarios.index') }}">Usuarios</a>
+                    </li>
+                @endif
             @endif
 
 
@@ -58,6 +63,7 @@
                 
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                         <li><a class="dropdown-item" href="/logout">Cerrar sesión</a></li>
+                        <li><a class="dropdown-item" href="/usuarios/{{ auth()->id() }}/edit">Mi cuenta</a></li>
                     </ul>
     
                 </li>

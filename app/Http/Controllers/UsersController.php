@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use App\Http\Requests\UpdateUserRequest;
+use App\Models\Role;
+use App\Http\Requests\CreateUserRequest;
 
 class UsersController extends Controller
 {
@@ -14,8 +16,8 @@ class UsersController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
-        $this->middleware('roles:admin', ['except' => ['edit', 'update']]);
+        $this->middleware('auth', ['except' => ['show']]);
+        $this->middleware('roles:admin', ['except' => ['edit', 'update', 'show']]);
     }
 
 
@@ -31,15 +33,21 @@ class UsersController extends Controller
      */
     public function create()
     {
-        //
+        $roles = Role::pluck('display_name', 'id');
+
+        return view('users.create', compact('roles'));
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateUserRequest $request)
     {
-        //
+        $user = User::create( $request->all() );
+
+        $user->roles()->attach($request->roles);
+
+        return redirect()->route('usuarios.index');
     }
 
     /**
@@ -47,7 +55,9 @@ class UsersController extends Controller
      */
     public function show(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        return view('users.show', compact('user'));
     }
 
     /**
@@ -59,7 +69,9 @@ class UsersController extends Controller
 
         $this->authorize('edit', $user);
 
-        return view('users.edit', compact('user'));
+        $roles = Role::pluck('display_name', 'id');
+
+        return view('users.edit', compact('user', 'roles'));
     }
 
     /**
@@ -69,7 +81,10 @@ class UsersController extends Controller
     {
         $user = User::findOrFail($id);
 
-        $user->update($request->all());
+        $this->authorize($user);
+
+        $user->update($request->only('name', 'email'));
+        $user->roles()->sync($request->roles);
 
         return back()->with('info', 'Usuario actualizado');
     }
@@ -79,6 +94,12 @@ class UsersController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        $this->authorize('destroy', $user);
+        
+        $user->delete();
+    
+        return back();
     }
 }

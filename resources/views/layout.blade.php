@@ -62,8 +62,8 @@
                     </a>
                 
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/logout">Cerrar sesión</a></li>
                         <li><a class="dropdown-item" href="/usuarios/{{ auth()->id() }}/edit">Mi cuenta</a></li>
+                        <li><a class="dropdown-item" href="/logout">Cerrar sesión</a></li>
                     </ul>
     
                 </li>

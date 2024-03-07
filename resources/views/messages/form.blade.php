@@ -5,7 +5,7 @@
             <input type="hidden" name="email" value="{{ auth()->user()->email }}">
         @endauth
 
-        @unless($message->user_id)
+        @if($showFields)
             <p><label for="nombre">
             Nombre 
             <input class="form-control" type="text" name="nombre" value="{{ $message->nombre ?? old('nombre') }}">
@@ -16,7 +16,7 @@
             <input class="form-control" type="text" name="email" value="{{ $message->email ?? old('email') }}">
             {!! $errors->first('email', '<span class=error>:message</span>') !!}
             </label></p>
-        @endunless
+        @endif
         <p><label for="mensaje">
         Mensaje 
         <textarea class="form-control" name="mensaje">{{ $message->mensaje ?? old('mensaje') }}</textarea>

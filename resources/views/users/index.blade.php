@@ -10,6 +10,8 @@
                 <th>Nombre</th>
                 <th>Email</th>
                 <th>Role</th>
+                <th>Notas</th>
+                <th>Etiquetas</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -23,6 +25,20 @@
                 <td>
                     {{ $user->roles->pluck('display_name')->implode(' - ')}}
                 </td>
+                
+                @if ($user->note)
+                    <td>{{ $user->note->body }}</td>
+                @else
+                    <td>No hay nota asociada</td>
+                @endif
+
+
+                @if ($user->tags)
+                    <td>{{ $user->tags->pluck('name')->implode(', ') }}</td>
+                @else
+                    <td>No hay nota asociada</td>
+                @endif
+
                 <td>
                     <a class="btn btn-info" href="{{ route('usuarios.edit', $user->id) }}">Editar</a>
                     <form style="display:inline" method="POST" action="{{ route('usuarios.destroy', $user->id) }}">

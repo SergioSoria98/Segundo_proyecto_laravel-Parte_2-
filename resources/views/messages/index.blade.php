@@ -9,6 +9,8 @@
                 <th>Nombre</th>
                 <th>Email</th>
                 <th>Mensaje</th>
+                <th>Notas</th>
+                <th>Etiquetas</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -30,6 +32,23 @@
                     <td>
                         <a href="{{ route('mensajes.show', $message->id) }}">{{ $message->mensaje }}</a>
                     </td>
+
+                    @if ($message->note)
+                        <td>{{ $message->note->body }}</td>
+                    @else
+                        <td>No hay nota asociada</td>
+                    @endif
+
+
+                    @if ($message->tags)
+                        <td>{{ $message->tags->pluck('name')->implode(', ') }}</td>
+                    @else
+                        <td>No hay tag asociado</td>
+                    @endif
+
+
+
+
                     <td>
                         <a class="btn btn-info" href="{{ route('mensajes.edit', $message->id) }}">Editar</a>
                         <form style="display:inline" method="POST" action="{{ route('mensajes.destroy', $message->id) }}">

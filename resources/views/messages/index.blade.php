@@ -1,6 +1,7 @@
 @extends('layout')
 
 @section('contenido')
+
     <h1>Todos los mensajes</h1>
     <table class="table">
         <thead>
@@ -59,6 +60,10 @@
                     </td>
                 </tr>
             @endforeach
+
+
+{!! $messages->fragment('hash')->appends(request()->query())->links('pagination::bootstrap-4', ['showInfo' => false]) !!}
+
         </tbody>
     </table>
 @stop

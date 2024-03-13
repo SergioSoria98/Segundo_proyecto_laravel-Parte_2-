@@ -2,16 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\Messages;
 use App\Models\Message;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Carbon;
+use App\Events\MessageWasReceived;
+use Illuminate\Support\Facades\Cache;
+use App\Repositories\CacheMessages;
+
 
 class MessagesController extends Controller
 {
+    protected $messages;
 
-    function __construct()
+    function __construct(CacheMessages $messages)
     {
+        $this->messages = $messages;
         $this->middleware('auth', ['except' => ['create', 'store']]);
     }
 
@@ -21,7 +26,7 @@ class MessagesController extends Controller
      */
     public function index()
     {
-        $messages = Message::with(['user', 'note', 'tags'])->get();
+        $messages = $this->messages->getPaginated();
 
         return view('messages.index', compact('messages'));
     }
@@ -39,10 +44,9 @@ class MessagesController extends Controller
      */
     public function store(Request $request)
     {
-        $message = Message::create($request->all());
+        $message = $this->messages->store($request);
 
-        $message->user_id = auth()->id();
-        $message->save();
+        event(new MessageWasReceived($message));
 
         return redirect()->route('mensajes.create')->with('info', 'Hemos recibido tu mensaje');
     }
@@ -52,7 +56,8 @@ class MessagesController extends Controller
      */
     public function show($id)
     {
-        $message = Message::findOrFail($id);
+        $message = $this->messages->findById($id);
+         
 
         return view('messages.show', compact('message'));
     }
@@ -62,7 +67,7 @@ class MessagesController extends Controller
      */
     public function edit($id)
     {
-        $message = Message::findOrFail($id);
+        $message = $this->messages->findById($id);
 
         return view('messages.edit', compact('message'));
     }
@@ -72,7 +77,7 @@ class MessagesController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $message = Message::findOrFail($id)->update($request->all());
+        $message = $this->messages->update($request, $id);
 
         return redirect()->route('mensajes.index');
     }
@@ -82,7 +87,7 @@ class MessagesController extends Controller
      */
     public function destroy(string $id)
     {
-        $message = Message::findOrFail($id)->delete();
+        $this->messages->destroy($id);
 
         return redirect()->route('mensajes.index');
     }

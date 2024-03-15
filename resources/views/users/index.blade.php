@@ -20,24 +20,13 @@
         @foreach ($users as $user)
             <tr>
                 <td>{{ $user->id }}</td>
-                <td>{{ $user->name }}</td>
+                <td>{!! $user->present()->link() !!}</td>
+             
                 <td>{{ $user->email }}</td>
-                <td>
-                    {{ $user->roles->pluck('display_name')->implode(' - ')}}
-                </td>
+                <td>{{ $user->present()->roles() }}</td>
                 
-                @if ($user->note)
-                    <td>{{ $user->note->body }}</td>
-                @else
-                    <td>No hay nota asociada</td>
-                @endif
-
-
-                @if ($user->tags)
-                    <td>{{ $user->tags->pluck('name')->implode(', ') }}</td>
-                @else
-                    <td>No hay nota asociada</td>
-                @endif
+                <td>{{ $user->present()->notes() }}</td>
+                <td>{{ $user->present()->tags() }}</td>
 
                 <td>
                     <a class="btn btn-info" href="{{ route('usuarios.edit', $user->id) }}">Editar</a>

@@ -2,19 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\Repositories\Messages;
+
 use App\Models\Message;
 use Illuminate\Http\Request;
 use App\Events\MessageWasReceived;
-use Illuminate\Support\Facades\Cache;
-use App\Repositories\CacheMessages;
-
+use App\Repositories\MessagesInterface;
 
 class MessagesController extends Controller
 {
     protected $messages;
 
-    function __construct(CacheMessages $messages)
+    function __construct(MessagesInterface $messages)
     {
         $this->messages = $messages;
         $this->middleware('auth', ['except' => ['create', 'store']]);

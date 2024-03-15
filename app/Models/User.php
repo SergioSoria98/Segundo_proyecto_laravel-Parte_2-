@@ -3,6 +3,8 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+
+use App\Presenters\UserPresenter;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -70,6 +72,10 @@ class User extends Authenticatable
         return $this->morphToMany(Tag::class, 'taggable')->withTimestamps();
     }
 
+    public function present()
+    {
+        return new UserPresenter($this);
+    }
 
     /**
      * The attributes that should be cast.

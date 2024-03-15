@@ -19,35 +19,13 @@
             @foreach ($messages as $message)
                 <tr>
                     <td>{{ $message->id }}</td>
-                    @if ($message->user_id)
-                        <td>
-                            <a href="{{ route('usuarios.show', $message->user_id) }}">
-                                {{ $message->user->name }}
-                            </a>
-                        </td>
-                        <td>{{ $message->user->email }}</td>
-                    @else
-                        <td>{{ $message->nombre }}</td>
-                        <td>{{ $message->email }}</td>
-                    @endif
-                    <td>
-                        <a href="{{ route('mensajes.show', $message->id) }}">{{ $message->mensaje }}</a>
-                    </td>
+                    <td>{{ $message->present()->userName() }}</td>
+                    <td>{{ $message->present()->userEmail() }}</td>
 
-                    @if ($message->note)
-                        <td>{{ $message->note->body }}</td>
-                    @else
-                        <td>No hay nota asociada</td>
-                    @endif
+                    <td>{{ $message->present()->link() }}</td>
 
-
-                    @if ($message->tags)
-                        <td>{{ $message->tags->pluck('name')->implode(', ') }}</td>
-                    @else
-                        <td>No hay tag asociado</td>
-                    @endif
-
-
+                    <td>{{ $message->present()->notes() }}</td>
+                    <td>{{ $message->present()->tags() }}</td>
 
 
                     <td>

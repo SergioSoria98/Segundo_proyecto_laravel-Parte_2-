@@ -4,10 +4,9 @@ namespace App\Repositories;
 
 
 use App\Models\Message;
+use Psr\Http\Message\MessageInterface;
 
-
-
-class Messages
+class Messages implements MessagesInterface
 {
     public function getPaginated()
     {

@@ -6,7 +6,9 @@ use App\Http\Controllers\PagesController;
 use App\Http\Controllers\LoginController;
 use App\Models\User;
 use App\Http\Controllers\UsersController;
+use App\Jobs\SendEmail;
 use App\Models\Role;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -28,6 +30,11 @@ App\Models\User::create([
     'role' => 'moderador',
 ]);
 */
+Route::get('job', function(){
+    dispatch(new SendEmail);
+
+    return "Listo!";
+});
 
 Route::get('roles', function(){
     return Role::with('user')->get();

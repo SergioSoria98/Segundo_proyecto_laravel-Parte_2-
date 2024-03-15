@@ -10,7 +10,7 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class MessageWasReceived
+class MessageWasReceived implements ShouldBroadcast
 {
     public $message;
 
@@ -33,7 +33,7 @@ class MessageWasReceived
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('channel-name'),
+            new Channel('messages-channel'),
         ];
     }
 }

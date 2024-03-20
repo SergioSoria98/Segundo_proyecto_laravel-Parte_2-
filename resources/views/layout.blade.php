@@ -8,9 +8,7 @@
 </head>
 <body>
     <header>
-    <?php function activeMenu($url){
-        return request()->is($url) ? 'active': '';
-    } ?>
+
     
     
     <nav class="navbar navbar-expand-lg navbar-light">
